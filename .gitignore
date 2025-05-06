@@ -1,0 +1,60 @@
+# Byte-compiled / optimized / DLL files
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+.virtualenvs/
+
+# Poetry
+.cache/
+.build/
+dist/
+*.egg-info/
+htmlcov/
+.tox/
+.pytest_cache/
+coverage.xml
+nosetests.xml
+*.cover
+.hypothesis/
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.example
+
+# Compiled assets
+/assets/build/
+/public/gen/
+
+# macOS specific
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows specific
+$RECYCLE.BIN/
+Desktop.ini
+ehthumbs.db
+Thumbs.db
