@@ -31,7 +31,7 @@ test:
 	poetry run pytest $(TEST_DIR)/test.py -v
 
 test-cov:
-    poetry run pytest --cov=api_scoring $(TEST_DIR)/test.py -v
+	poetry run pytest --cov=api_scoring $(TEST_DIR)/test.py -v
 
 # ==== Запуск ====
 
@@ -58,13 +58,13 @@ docker-run:
 
 clean:
 	rm -rf __pycache__ \
-	       *.pyc \
-           .pytest_cache \
-           htmlcov \
-           .coverage \
-           .tox \
-           dist \
-           build \
-           *.egg-info \
-           venv
+			*.pyc \
+			.pytest_cache \
+			htmlcov \
+			.coverage \
+			.tox \
+			dist \
+			build \
+			*.egg-info \
+			venv
 	@echo "Очистка завершена"
