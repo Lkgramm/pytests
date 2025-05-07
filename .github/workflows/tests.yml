@@ -1,4 +1,4 @@
-name: Run Tests on Push and PR
+name: CI & Poetry Lock Update
 
 on:
   push:
@@ -9,10 +9,58 @@ on:
     branches:
       - main
       - master
+  schedule:
+    - cron: "0 0 * * 0"  # раз в неделю
+  workflow_dispatch: {}  # ручной запуск
 
 jobs:
-  test:
+  update-poetry:
+    name: Update poetry.lock if needed
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Check pyproject.toml changes
+        id: check_changes
+        run: |
+          git fetch --depth=1 origin main
+          git diff --exit-code origin/main pyproject.toml || echo "::set-output name=changed::true"
+
+      - name: Update poetry.lock
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          poetry config virtualenvs.create false
+          poetry install --no-root
+          poetry lock --no-update
+          git config --local user.email "github-actions@example.com"
+          git config --local user.name "GitHub Actions"
+          git add poetry.lock
+          git commit -m "Update poetry.lock after pyproject.toml change"
+
+      - name: Push changes
+        if: steps.check_changes.outputs.changed == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+  test:
+    name: Run tests
+    needs: update-poetry
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
