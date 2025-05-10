@@ -28,10 +28,20 @@ venv:
 # ==== Тестирование ====
 
 test:
-	poetry run pytest $(TEST_DIR)/test.py -v
+	poetry run pytest $(TEST_DIR) -v
+
+test-unit:
+	poetry run pytest $(UNIT_TEST_DIR) -v
+
+test-integration: start-redis
+	poetry run pytest tests/integration/ -v
+	$(MAKE) stop-redisv
+
+test-functional:
+	poetry run pytest tests/functional/test.py -v
 
 test-cov:
-	poetry run pytest --cov=api_scoring $(TEST_DIR)/test.py -v
+	poetry run pytest --cov=$(SRC_DIR) $(TEST_DIR) -v
 
 # ==== Запуск ====
 
